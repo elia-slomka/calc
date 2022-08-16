@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+    <table>
+        <tr>
+            <td><input id="op1" /></td>
+            <td>
+                <select id="operator">
+                    <option value="+">+</option>
+                    <option value="-">-</option>
+                    <option value="*">*</option>
+                    <option value="/">/</option>
+                </select>
+            </td>
+            <td><input id="op2" /></td>
+            <td><input id="result" readonly="readonly" /></td>
+            <td><button id="calculate" onclick="calculate()">Calculate</button></td>
+        </tr>
+
+    </table>
+</body>
+
+<script>
+    function calculate() {
+        var op1 = $("#op1").val();
+        var op2 = $("#op2").val();
+        var operator = $("#operator").val();
+
+        $.ajax(
+            {
+                url: "https://localhost:5001/Calculator",
+                dataType: 'json',
+                type: 'post',
+                contentType: 'application/json',
+                data: JSON.stringify( {
+                    operators: [operator],
+                    operands: [parseFloat(op1),parseFloat(op2)]
+                }),
+                success: function( data, textStatus, jQxhr ){
+                    $("#result").val(data.result);
+                },
+                error: function( jqXhr, textStatus, errorThrown ){
+                    console.log( errorThrown );
+                }
+            });
+    }
+</script>
+</html>
